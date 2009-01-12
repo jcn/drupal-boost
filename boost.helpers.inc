@@ -67,18 +67,18 @@ function _boost_symlink($target, $link) {
 
   // Only bother creating a relative link if the paths are in the same
   // top-level directory; otherwise just symlink to the absolute path.
-  if ($target[1] == $link[1]) {
-    // Remove the common path prefix
-    $cwd = array();
-    while (count($target) > 0 && count($link) > 0 && reset($target) == reset($link)) {
-      $cwd[] = array_shift($target);
-      array_shift($link);
-    }
-    // Compute the required relative path
-    if (count($link) > 1)
-      $target = array_merge(array_fill(0, count($link) - 1, '..'), $target);
-    $link = array_merge($cwd, $link);
-  }
+#  if ($target[1] == $link[1]) {
+#    // Remove the common path prefix
+#    $cwd = array();
+#    while (count($target) > 0 && count($link) > 0 && reset($target) == reset($link)) {
+#      $cwd[] = array_shift($target);
+#      array_shift($link);
+#    }
+#    // Compute the required relative path
+#    if (count($link) > 1)
+#      $target = array_merge(array_fill(0, count($link) - 1, '..'), $target);
+#    $link = array_merge($cwd, $link);
+#  }
 
   return symlink(implode('/', $target), implode('/', $link));
 }

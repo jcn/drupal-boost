@@ -185,7 +185,8 @@ function boost_file_path($path) {
   }
 
   // Convert any other undesirable characters in the path to underscores
-  $path = preg_replace('@[^/a-z0-9_-]@i', '_', $path);
+  $path = preg_replace('/\s/', '+', $path);
+  $path = preg_replace('@[^\+/a-z0-9_-]@i', '_', $path);
 
   return boost_cache_directory() . '/' . $path . BOOST_FILE_EXTENSION;
 }
@@ -203,8 +204,12 @@ function boost_file_get_age($filename) {
  * the maximum cache lifetime as defined by Drupal's system settings.
  */
 function boost_file_is_expired($filename) {
-  if (is_link($filename))
-    return FALSE;
+  // Follow the symlink to figure out the age of the underlying file
+  if (is_link($filename)) {
+    # $filename = readlink($filename);
+    return true;
+  }
+
   return boost_file_get_age($filename) > variable_get('cache_lifetime', 600);
 }
 
