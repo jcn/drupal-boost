@@ -30,7 +30,9 @@ function _boost_mkdir_p($pathname, $mode = 0775, $recursive = TRUE) {
 function _boost_rmdir_rf($dirname, $callback = NULL) {
   $empty = TRUE; // Start with an optimistic mindset
 
-  foreach (glob($dirname . '/*', GLOB_NOSORT) as $file) {
+  foreach (array_diff(scandir($dirname), array(".", "..")) as $file) {
+    $file = $dirname . '/' . $file;
+
     if (is_dir($file)) {
       if (!_boost_rmdir_rf($file, $callback))
         $empty = FALSE;
@@ -45,7 +47,7 @@ function _boost_rmdir_rf($dirname, $callback = NULL) {
       @unlink($file);
     }
     else {
-      $empty = FALSE; // it's probably a symbolic link
+      @unlink($file);
     }
   }
 

@@ -206,8 +206,7 @@ function boost_file_get_age($filename) {
 function boost_file_is_expired($filename) {
   // Follow the symlink to figure out the age of the underlying file
   if (is_link($filename)) {
-    # $filename = readlink($filename);
-    return true;
+    $filename = readlink($filename);
   }
 
   return boost_file_get_age($filename) > variable_get('cache_lifetime', 600);
